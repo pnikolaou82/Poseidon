@@ -2,7 +2,7 @@ name: Build and Push Operator Image & Helm Chart
 
 on:
   push:
-    branches: ["main"]
+    branches: ["dev"]
     paths:
       - "operators/prometheus-tuner/**"
       - "helm-charts/**"
@@ -66,11 +66,5 @@ jobs:
         run: |
           mkdir -p ./helm-charts/pkg
           helm package ./helm-charts/prometheus-tuner --destination ./helm-charts/pkg
-
-      - name: Upload Chart Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: prometheus-tuner-chart
-          path: ./helm-charts/pkg/prometheus-tuner-*.tgz
 
 
