@@ -1,10 +1,11 @@
-name: Build and Push Operator Image
+name: Build and Push Operator Image & Helm Chart
 
 on:
   push:
     branches: [ "main" ]
     paths:
       - "operators/prometheus-tuner/**"
+      - "helm-charts/**"
       - ".github/workflows/operator-ci.yml"
 
 jobs:
@@ -26,7 +27,7 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to Docker Hub
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -37,3 +38,32 @@ jobs:
           cd operators/prometheus-tuner
           make docker-build IMG=docker.io/${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
           make docker-push IMG=docker.io/${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
+
+  helm:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.0
+
+      - name: Lint Helm Chart
+        run: helm lint ./helm-charts/prometheus-tuner
+
+      - name: Template Helm Chart
+        run: helm template prometheus-tuner ./helm-charts/prometheus-tuner
+
+      - name: Package Helm Chart
+        run: |
+          mkdir -p ./helm-charts/pkg
+          helm package ./helm-charts/prometheus-tuner --destination ./helm-charts/pkg
+
+      - name: Upload Chart Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: prometheus-tuner-chart
+          path: ./helm-charts/pkg/prometheus-tuner-*.tgz
