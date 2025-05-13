@@ -20,6 +20,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+
 // PrometheusRuleTunerSpec defines the desired state of PrometheusRuleTuner
 type PrometheusRuleTunerSpec struct {
 	// DeploymentName is the name of the deployment to monitor
@@ -40,8 +41,6 @@ type PrometheusRuleTunerStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
-// PrometheusRuleTuner is the Schema for the prometheusruletuners API
 type PrometheusRuleTuner struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -51,8 +50,6 @@ type PrometheusRuleTuner struct {
 }
 
 // +kubebuilder:object:root=true
-
-// PrometheusRuleTunerList contains a list of PrometheusRuleTuner
 type PrometheusRuleTunerList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`

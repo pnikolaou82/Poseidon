@@ -17,8 +17,6 @@ spec:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: PrometheusRuleTuner is the Schema for the prometheusruletuners
-          API
         properties:
           apiVersion:
             description: |-
