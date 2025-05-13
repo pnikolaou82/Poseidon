@@ -17,6 +17,12 @@ limitations under the License.
 package controller
 
 import (
+	"fmt"
+	"time"
+
+	v1 "k8s.io/api/core/v1"
+	metrics "k8s.io/metrics/pkg/client/clientset/versioned"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"context"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -47,12 +53,67 @@ type PrometheusRuleTunerReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.19.0/pkg/reconcile
 func (r *PrometheusRuleTunerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	log := log.FromContext(ctx)
 
-	// TODO(user): your logic here
+	// Fetch the PrometheusRuleTuner instance
+	var tuner srev1alpha1.PrometheusRuleTuner
+	if err := r.Get(ctx, req.NamespacedName, &tuner); err != nil {
+		log.Error(err, "unable to fetch PrometheusRuleTuner")
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
 
-	return ctrl.Result{}, nil
+	// Setup metrics client
+	cfg, err := ctrl.GetConfig()
+	if err != nil {
+		log.Error(err, "unable to get Kubernetes config")
+		return ctrl.Result{}, err
+	}
+
+	metricsClient, err := metrics.NewForConfig(cfg)
+	if err != nil {
+		log.Error(err, "unable to create metrics client")
+		return ctrl.Result{}, err
+	}
+
+	// Get all pod metrics in the namespace
+	podMetricsList, err := metricsClient.MetricsV1beta1().PodMetricses(tuner.Spec.Namespace).List(ctx, metav1.ListOptions{})
+	if err != nil {
+		log.Error(err, "unable to list pod metrics")
+		return ctrl.Result{RequeueAfter: 30 * time.Second}, nil
+	}
+
+	var totalCPU, totalMem int64
+	var matchedPods int
+
+	for _, podMetric := range podMetricsList.Items {
+		// Match pods by owner deployment name in labels
+		if podMetric.Labels["app"] == tuner.Spec.DeploymentName {
+			for _, container := range podMetric.Containers {
+				totalCPU += container.Usage.Cpu().MilliValue()
+				totalMem += container.Usage.Memory().Value()
+			}
+			matchedPods++
+		}
+	}
+
+	log.Info("Resource usage collected",
+		"deployment", tuner.Spec.DeploymentName,
+		"cpu(m)", totalCPU,
+		"memory(bytes)", totalMem)
+
+	// Update status
+	tuner.Status.CPUUsage = fmt.Sprintf("%dm", totalCPU)
+	tuner.Status.MemoryUsage = fmt.Sprintf("%dMi", totalMem/1024/1024)
+
+	if err := r.Status().Update(ctx, &tuner); err != nil {
+		log.Error(err, "unable to update PrometheusRuleTuner status")
+		return ctrl.Result{}, err
+	}
+
+	// Requeue after 60 seconds to refresh metrics
+	return ctrl.Result{RequeueAfter: 60 * time.Second}, nil
 }
+
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *PrometheusRuleTunerReconciler) SetupWithManager(mgr ctrl.Manager) error {

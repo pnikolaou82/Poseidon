@@ -20,22 +20,22 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // PrometheusRuleTunerSpec defines the desired state of PrometheusRuleTuner
 type PrometheusRuleTunerSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// DeploymentName is the name of the deployment to monitor
+	DeploymentName string `json:"deploymentName"`
 
-	// Foo is an example field of PrometheusRuleTuner. Edit prometheusruletuner_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// Namespace is the namespace of the deployment
+	Namespace string `json:"namespace"`
 }
 
 // PrometheusRuleTunerStatus defines the observed state of PrometheusRuleTuner
 type PrometheusRuleTunerStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// CPUUsage in millicores (e.g., "250m")
+	CPUUsage string `json:"cpuUsage,omitempty"`
+
+	// MemoryUsage in MiB (e.g., "128Mi")
+	MemoryUsage string `json:"memoryUsage,omitempty"`
 }
 
 // +kubebuilder:object:root=true
