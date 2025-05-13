@@ -67,3 +67,4 @@ jobs:
         with:
           name: prometheus-tuner-chart
           path: ./helm-charts/pkg/prometheus-tuner-*.tgz
+
