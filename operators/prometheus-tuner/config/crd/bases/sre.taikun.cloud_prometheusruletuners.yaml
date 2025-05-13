@@ -40,13 +40,25 @@ spec:
           spec:
             description: PrometheusRuleTunerSpec defines the desired state of PrometheusRuleTuner
             properties:
-              foo:
-                description: Foo is an example field of PrometheusRuleTuner. Edit
-                  prometheusruletuner_types.go to remove/update
+              deploymentName:
+                description: DeploymentName is the name of the deployment to monitor
                 type: string
+              namespace:
+                description: Namespace is the namespace of the deployment
+                type: string
+            required:
+            - deploymentName
+            - namespace
             type: object
           status:
             description: PrometheusRuleTunerStatus defines the observed state of PrometheusRuleTuner
+            properties:
+              cpuUsage:
+                description: CPUUsage in millicores (e.g., "250m")
+                type: string
+              memoryUsage:
+                description: MemoryUsage in MiB (e.g., "128Mi")
+                type: string
             type: object
         type: object
     served: true
