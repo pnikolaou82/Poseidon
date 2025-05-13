@@ -63,7 +63,7 @@ jobs:
           helm package ./helm-charts/prometheus-tuner --destination ./helm-charts/pkg
 
       - name: Upload Chart Artifact
-        uses: ./github/actions/upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
           name: prometheus-tuner-chart
           path: ./helm-charts/pkg/prometheus-tuner-*.tgz
