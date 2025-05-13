@@ -32,24 +32,24 @@ import (
 	srev1alpha1 "github.com/taikun-cloud/poseidon/operators/get-resources/api/v1alpha1"
 )
 
-// PrometheusRuleTunerReconciler reconciles a PrometheusRuleTuner object
-type PrometheusRuleTunerReconciler struct {
+// ResourcesTunerReconciler reconciles a ResourcesTuner object
+type ResourcesTunerReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
 
-// +kubebuilder:rbac:groups=sre.taikun.cloud,resources=prometheusruletuners,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=sre.taikun.cloud,resources=prometheusruletuners/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=sre.taikun.cloud,resources=prometheusruletuners/finalizers,verbs=update
+// +kubebuilder:rbac:groups=sre.taikun.cloud,resources=resourcestuner,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=sre.taikun.cloud,resources=resourcestuner/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=sre.taikun.cloud,resources=resourcestuner/finalizers,verbs=update
 // +kubebuilder:rbac:groups=coordination.k8s.io,resources=leases,verbs=get;list;watch;create;update;patch
 // +kubebuilder:rbac:groups=metrics.k8s.io,resources=pods,verbs=get;list
-func (r *PrometheusRuleTunerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *ResourcesTunerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := log.FromContext(ctx)
 
-	// Fetch the PrometheusRuleTuner instance
-	var tuner srev1alpha1.PrometheusRuleTuner
+	// Fetch the ResourcesTuner instance
+	var tuner srev1alpha1.ResourcesTuner
 	if err := r.Get(ctx, req.NamespacedName, &tuner); err != nil {
-		log.Error(err, "unable to fetch PrometheusRuleTuner")
+		log.Error(err, "unable to fetch ResourcesTuner")
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
@@ -97,7 +97,7 @@ func (r *PrometheusRuleTunerReconciler) Reconcile(ctx context.Context, req ctrl.
 	tuner.Status.MemoryUsage = fmt.Sprintf("%dMi", totalMem/1024/1024)
 
 	if err := r.Status().Update(ctx, &tuner); err != nil {
-		log.Error(err, "unable to update PrometheusRuleTuner status")
+		log.Error(err, "unable to update ResourcesTuner status")
 		return ctrl.Result{}, err
 	}
 
@@ -107,8 +107,8 @@ func (r *PrometheusRuleTunerReconciler) Reconcile(ctx context.Context, req ctrl.
 
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *PrometheusRuleTunerReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *ResourcesTunerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&srev1alpha1.PrometheusRuleTuner{}).
+		For(&srev1alpha1.ResourcesTuner{}).
 		Complete(r)
 }

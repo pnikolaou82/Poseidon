@@ -1,4 +1,4 @@
 ## Append samples of your project ##
 resources:
-- sre_v1alpha1_prometheusruletuner.yaml
+- sre_v1alpha1_resourcestuner.yaml
 # +kubebuilder:scaffold:manifestskustomizesamples

@@ -144,11 +144,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controller.PrometheusRuleTunerReconciler{
+	if err = (&controller.ResourcesTunerReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "PrometheusRuleTuner")
+		setupLog.Error(err, "unable to create controller", "controller", "ResourcesTuner")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

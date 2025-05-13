@@ -7,7 +7,7 @@ rules:
 - apiGroups:
   - sre.taikun.cloud
   resources:
-  - prometheusruletuners
+  - resourcestuner
   verbs:
   - create
   - delete
@@ -19,13 +19,13 @@ rules:
 - apiGroups:
   - sre.taikun.cloud
   resources:
-  - prometheusruletuners/finalizers
+  - resourcestuner/finalizers
   verbs:
   - update
 - apiGroups:
   - sre.taikun.cloud
   resources:
-  - prometheusruletuners/status
+  - resourcestuner/status
   verbs:
   - get
   - patch

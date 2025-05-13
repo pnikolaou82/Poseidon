@@ -1,16 +1,16 @@
-# permissions for end users to view prometheusruletuners.
+# permissions for end users to view resourcestuner.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/name: get-resources
     app.kubernetes.io/managed-by: kustomize
-  name: prometheusruletuner-viewer-role
+  name: resourcestuner-viewer-role
 rules:
 - apiGroups:
   - sre.taikun.cloud
   resources:
-  - prometheusruletuners
+  - resourcestuner
   verbs:
   - get
   - list
@@ -18,6 +18,6 @@ rules:
 - apiGroups:
   - sre.taikun.cloud
   resources:
-  - prometheusruletuners/status
+  - resourcestuner/status
   verbs:
   - get

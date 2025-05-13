@@ -30,7 +30,7 @@ import (
 	srev1alpha1 "github.com/taikun-cloud/poseidon/operators/get-resources/api/v1alpha1"
 )
 
-var _ = Describe("PrometheusRuleTuner Controller", func() {
+var _ = Describe("ResourcesTuner Controller", func() {
 	Context("When reconciling a resource", func() {
 		const resourceName = "test-resource"
 
@@ -40,13 +40,13 @@ var _ = Describe("PrometheusRuleTuner Controller", func() {
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		prometheusruletuner := &srev1alpha1.PrometheusRuleTuner{}
+		resourcestuner := &srev1alpha1.ResourcesTuner{}
 
 		BeforeEach(func() {
-			By("creating the custom resource for the Kind PrometheusRuleTuner")
-			err := k8sClient.Get(ctx, typeNamespacedName, prometheusruletuner)
+			By("creating the custom resource for the Kind ResourcesTuner")
+			err := k8sClient.Get(ctx, typeNamespacedName, resourcestuner)
 			if err != nil && errors.IsNotFound(err) {
-				resource := &srev1alpha1.PrometheusRuleTuner{
+				resource := &srev1alpha1.ResourcesTuner{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
@@ -59,16 +59,16 @@ var _ = Describe("PrometheusRuleTuner Controller", func() {
 
 		AfterEach(func() {
 			// TODO(user): Cleanup logic after each test, like removing the resource instance.
-			resource := &srev1alpha1.PrometheusRuleTuner{}
+			resource := &srev1alpha1.ResourcesTuner{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 
-			By("Cleanup the specific resource instance PrometheusRuleTuner")
+			By("Cleanup the specific resource instance ResourcesTuner")
 			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
 		})
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
-			controllerReconciler := &PrometheusRuleTunerReconciler{
+			controllerReconciler := &ResourcesTunerReconciler{
 				Client: k8sClient,
 				Scheme: k8sClient.Scheme(),
 			}

@@ -1,16 +1,16 @@
-# permissions for end users to edit prometheusruletuners.
+# permissions for end users to edit resourcestuner.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/name: get-resources
     app.kubernetes.io/managed-by: kustomize
-  name: prometheusruletuner-editor-role
+  name: resourcestuner-editor-role
 rules:
 - apiGroups:
   - sre.taikun.cloud
   resources:
-  - prometheusruletuners
+  - resourcestuner
   verbs:
   - create
   - delete
@@ -22,6 +22,6 @@ rules:
 - apiGroups:
   - sre.taikun.cloud
   resources:
-  - prometheusruletuners/status
+  - resourcestuner/status
   verbs:
   - get
