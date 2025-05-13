@@ -1,0 +1,9 @@
+apiVersion: sre.taikun.cloud/v1alpha1
+kind: PrometheusRuleTuner
+metadata:
+  labels:
+    app.kubernetes.io/name: prometheus-tuner
+    app.kubernetes.io/managed-by: kustomize
+  name: prometheusruletuner-sample
+spec:
+  # TODO(user): Add fields here

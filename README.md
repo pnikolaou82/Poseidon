@@ -40,7 +40,7 @@ Poseidon provides:
 ```
 poseidon/
 ├── operators/                # Operator SDK projects (Go or Ansible)
-│   └── get-resources/    # Example operator for tuning alert thresholds
+│   └── prometheus-tuner/    # Example operator for tuning alert thresholds
 │
 ├── dashboard/               # Flask-based SRE dashboard
 │   ├── app/
@@ -90,7 +90,7 @@ flask run
 ### Deploy an Operator
 
 ```bash
-cd poseidon/operators/get-resources
+cd poseidon/operators/prometheus-tuner
 make install
 make run
 ```
