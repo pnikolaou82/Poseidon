@@ -21,8 +21,8 @@ import (
 )
 
 
-// ResourcesTunerSpec defines the desired state of ResourcesTuner
-type ResourcesTunerSpec struct {
+// PrometheusRuleTunerSpec defines the desired state of PrometheusRuleTuner
+type PrometheusRuleTunerSpec struct {
 	// DeploymentName is the name of the deployment to monitor
 	DeploymentName string `json:"deploymentName"`
 
@@ -30,8 +30,8 @@ type ResourcesTunerSpec struct {
 	Namespace string `json:"namespace"`
 }
 
-// ResourcesTunerStatus defines the observed state of ResourcesTuner
-type ResourcesTunerStatus struct {
+// PrometheusRuleTunerStatus defines the observed state of PrometheusRuleTuner
+type PrometheusRuleTunerStatus struct {
 	// CPUUsage in millicores (e.g., "250m")
 	CPUUsage string `json:"cpuUsage,omitempty"`
 
@@ -41,21 +41,21 @@ type ResourcesTunerStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-type ResourcesTuner struct {
+type PrometheusRuleTuner struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   ResourcesTunerSpec   `json:"spec,omitempty"`
-	Status ResourcesTunerStatus `json:"status,omitempty"`
+	Spec   PrometheusRuleTunerSpec   `json:"spec,omitempty"`
+	Status PrometheusRuleTunerStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
-type ResourcesTunerList struct {
+type PrometheusRuleTunerList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []ResourcesTuner `json:"items"`
+	Items           []PrometheusRuleTuner `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&ResourcesTuner{}, &ResourcesTunerList{})
+	SchemeBuilder.Register(&PrometheusRuleTuner{}, &PrometheusRuleTunerList{})
 }

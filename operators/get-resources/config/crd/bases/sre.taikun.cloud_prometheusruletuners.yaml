@@ -4,14 +4,14 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.1
-  name: resourcestuner.sre.taikun.cloud
+  name: prometheusruletuners.sre.taikun.cloud
 spec:
   group: sre.taikun.cloud
   names:
-    kind: ResourcesTuner
-    listKind: ResourcesTunerList
-    plural: resourcestuner
-    singular: resourcestuner
+    kind: PrometheusRuleTuner
+    listKind: PrometheusRuleTunerList
+    plural: prometheusruletuners
+    singular: prometheusruletuner
   scope: Namespaced
   versions:
   - name: v1alpha1
@@ -36,7 +36,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourcesTunerSpec defines the desired state of ResourcesTuner
+            description: PrometheusRuleTunerSpec defines the desired state of PrometheusRuleTuner
             properties:
               deploymentName:
                 description: DeploymentName is the name of the deployment to monitor
@@ -49,7 +49,7 @@ spec:
             - namespace
             type: object
           status:
-            description: ResourcesTunerStatus defines the observed state of ResourcesTuner
+            description: PrometheusRuleTunerStatus defines the observed state of PrometheusRuleTuner
             properties:
               cpuUsage:
                 description: CPUUsage in millicores (e.g., "250m")

@@ -17,7 +17,7 @@ resources:
   controller: true
   domain: taikun.cloud
   group: sre
-  kind: ResourcesTuner
+  kind: PrometheusRuleTuner
   path: github.com/taikun-cloud/poseidon/operators/get-resources/api/v1alpha1
   version: v1alpha1
 version: "3"
