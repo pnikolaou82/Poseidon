@@ -99,7 +99,7 @@ make run
 
 ## 🧭 Use Cases
 
-- Automatically reconcile PrometheusRule CRs
+- Automatically reconcile ResourceRule CRs
 - Auto-tune alert thresholds based on usage patterns
 - Visualize noisy alerts and their trends
 - Schedule and audit cleanup of expired Kubernetes resources
