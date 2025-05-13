@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "operators/prometheus-tuner/**"
+      - "operators/get-resources/**"
       - "helm-charts/**"
       - ".github/workflows/operator-ci.yml"
 
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IMAGE_NAME: prometheus-tuner
+      IMAGE_NAME: get-resources
 
     steps:
       - name: Checkout repo
@@ -35,12 +35,12 @@ jobs:
 
       - name: Tidy Go Modules
         run: |
-          cd operators/prometheus-tuner
+          cd operators/get-resources
           go mod tidy
 
       - name: Build and Push Docker image
         run: |
-          cd operators/prometheus-tuner
+          cd operators/get-resources
           make docker-build IMG=docker.io/${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
           make docker-push IMG=docker.io/${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
 
@@ -57,20 +57,20 @@ jobs:
           version: v3.12.0
 
       - name: Lint Helm Chart
-        run: helm lint ./helm-charts/prometheus-tuner
+        run: helm lint ./helm-charts/get-resources
 
       - name: Template Helm Chart
-        run: helm template prometheus-tuner ./helm-charts/prometheus-tuner
+        run: helm template get-resources ./helm-charts/get-resources
 
       - name: Package Helm Chart
         run: |
           mkdir -p ./helm-charts/pkg
-          helm package ./helm-charts/prometheus-tuner --destination ./helm-charts/pkg
+          helm package ./helm-charts/get-resources --destination ./helm-charts/pkg
 
       - name: Upload Chart Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: prometheus-tuner-chart
-          path: ./helm-charts/pkg/prometheus-tuner-*.tgz
+          name: get-resources-chart
+          path: ./helm-charts/pkg/get-resources-*.tgz
 
 
