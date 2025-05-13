@@ -33,6 +33,11 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Tidy Go Modules
+        run: |
+          cd operators/prometheus-tuner
+          go mod tidy
+
       - name: Build and Push Docker image
         run: |
           cd operators/prometheus-tuner
