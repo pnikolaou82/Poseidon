@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: docker.io/pnikolaou82/prometheus-tuner
+  repository: docker.io/panostaikun/prometheus-tuner
   tag: latest
   pullPolicy: IfNotPresent
 
