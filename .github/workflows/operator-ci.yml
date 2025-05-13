@@ -13,7 +13,6 @@ jobs:
 
     env:
       IMAGE_NAME: prometheus-tuner
-      DOCKER_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
     steps:
       - name: Checkout repo
@@ -27,15 +26,14 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to GitHub Container Registry
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Docker image
         run: |
           cd operators/prometheus-tuner
-          make docker-build IMG=${DOCKER_REGISTRY}/${IMAGE_NAME}:latest
-          make docker-push IMG=${DOCKER_REGISTRY}/${IMAGE_NAME}:latest
+          make docker-build IMG=docker.io/${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
+          make docker-push IMG=docker.io/${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
