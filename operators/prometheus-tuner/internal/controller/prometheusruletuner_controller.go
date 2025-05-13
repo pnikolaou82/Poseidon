@@ -39,8 +39,10 @@ type PrometheusRuleTunerReconciler struct {
 }
 
 // +kubebuilder:rbac:groups=sre.taikun.cloud,resources=prometheusruletuners,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=coordination.k8s.io,resources=leases,verbs=get;list;watch;create;update;patch
+// +kubebuilder:rbac:groups=sre.taikun.cloud,resources=prometheusruletuners/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=sre.taikun.cloud,resources=prometheusruletuners/finalizers,verbs=update
+// +kubebuilder:rbac:groups=coordination.k8s.io,resources=leases,verbs=get;list;watch;create;update;patch
+// +kubebuilder:rbac:groups=metrics.k8s.io,resources=pods,verbs=get;list
 func (r *PrometheusRuleTunerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := log.FromContext(ctx)
 
