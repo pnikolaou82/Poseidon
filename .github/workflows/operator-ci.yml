@@ -1,0 +1,41 @@
+name: Build and Push Operator Image
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "operators/prometheus-tuner/**"
+      - ".github/workflows/operator-ci.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: prometheus-tuner
+      DOCKER_REGISTRY: ghcr.io/${{ github.repository_owner }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker image
+        run: |
+          cd operators/prometheus-tuner
+          make docker-build IMG=${DOCKER_REGISTRY}/${IMAGE_NAME}:latest
+          make docker-push IMG=${DOCKER_REGISTRY}/${IMAGE_NAME}:latest
